@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== MACHINES VIEWS ==================== -->
+    <record id="view_maintenance_machine_list" model="ir.ui.view">
+        <field name="name">maintenance.machine.list</field>
+        <field name="model">maintenance.machine</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="serial_number"/>
+                <field name="working_site"/>
+                <field name="job"/>
+                <field name="team_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_maintenance_machine_form" model="ir.ui.view">
+        <field name="name">maintenance.machine.form</field>
+        <field name="model">maintenance.machine</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Machine Name"/>
+                        <h1><field name="name" placeholder="e.g. CNC Laser Cutter"/></h1>
+                    </div>
+                    <group>
+                        <group string="Technical Details">
+                            <field name="serial_number"/>
+                            <field name="job"/>
+                            <field name="manufacturer"/>
+                        </group>
+                        <group string="Location &amp; Costs">
+                            <field name="working_site"/>
+                            <field name="acquisition_date"/>
+                            <field name="cost"/>
+                            <field name="team_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Components / Parts" name="parts">
+                            <field name="part_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="serial_number"/>
+                                    <field name="manufacturer"/>
+                                    <field name="cost"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== PARTS INVENTORY VIEWS ==================== -->
+    <record id="view_maintenance_part_list" model="ir.ui.view">
+        <field name="name">maintenance.part.list</field>
+        <field name="model">maintenance.part</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="serial_number"/>
+                <field name="machine_id"/>
+                <field name="manufacturer"/>
+                <field name="cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_maintenance_part_form" model="ir.ui.view">
+        <field name="name">maintenance.part.form</field>
+        <field name="model">maintenance.part</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="serial_number"/>
+                            <field name="machine_id"/>
+                        </group>
+                        <group>
+                            <field name="manufacturer"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TEAMS VIEWS ==================== -->
+    <record id="view_maintenance_team_list" model="ir.ui.view">
+        <field name="name">maintenance.team.list</field>
+        <field name="model">maintenance.team</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="role"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_maintenance_team_form" model="ir.ui.view">
+        <field name="name">maintenance.team.form</field>
+        <field name="model">maintenance.team</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="role"/>
+                    </group>
+                    <notebook>
+                        <page string="Team Members" name="members">
+                            <field name="member_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="login"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== OPERATIONS VIEWS ==================== -->
+    <record id="view_maintenance_operation_list" model="ir.ui.view">
+        <field name="name">maintenance.operation.list</field>
+        <field name="model">maintenance.operation</field>
+        <field name="arch" type="xml">
+            <list decoration-success="status == 'done'" decoration-info="status == 'draft'">
+                <field name="request_id"/>
+                <field name="action_type"/>
+                <field name="part_id"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_maintenance_operation_form" model="ir.ui.view">
+        <field name="name">maintenance.operation.form</field>
+        <field name="model">maintenance.operation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="request_id"/>
+                            <field name="action_type"/>
+                            <field name="part_id"/>
+                        </group>
+                        <group>
+                            <field name="worker_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== MAINTENANCE REQUESTS VIEWS (Tickets) ==================== -->
+    <record id="view_maintenance_request_list" model="ir.ui.view">
+        <field name="name">maintenance.request.list</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state == 'draft'" decoration-info="state == 'open'" decoration-success="state == 'success'">
+                <field name="name"/>
+                <field name="date_opened"/>
+                <field name="machine_id"/>
+                <field name="team_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_maintenance_request_form" model="ir.ui.view">
+        <field name="name">maintenance.request.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_repair" string="Start Repair" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_close_request_success" string="Mark as Resolved" type="object" class="oe_highlight" invisible="state != 'open'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,success,fail"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="machine_id"/>
+                            <field name="team_id"/>
+                        </group>
+                        <group>
+                            <field name="date_opened"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="issue_description" placeholder="Describe the failure symptoms..."/>
+                    </group>
+                    <notebook>
+                        <page string="Operations Logged" name="operations">
+                            <field name="operation_ids">
+                                <list>
+                                    <field name="action_type"/>
+                                    <field name="part_id"/>
+                                    <field name="worker_ids" widget="many2many_tags"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    <record id="action_maintenance_machine" model="ir.actions.act_window">
+        <field name="name">Machines Inventory</field>
+        <field name="res_model">maintenance.machine</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_maintenance_part" model="ir.actions.act_window">
+        <field name="name">Parts Inventory</field>
+        <field name="res_model">maintenance.part</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_maintenance_team" model="ir.actions.act_window">
+        <field name="name">Maintenance Teams</field>
+        <field name="res_model">maintenance.team</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_maintenance_operation" model="ir.actions.act_window">
+        <field name="name">Work Operations</field>
+        <field name="res_model">maintenance.operation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_maintenance_request" model="ir.actions.act_window">
+        <field name="name">Maintenance Tickets</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ==================== MENUS HIERARCHY ==================== -->
+    <!-- Top Level -->
+    <menuitem id="menu_custom_maintenance_root" name="Maintenance SI" sequence="5"/>
+    
+    <!-- Level 2: Workspaces -->
+    <menuitem id="menu_maintenance_workspaces" name="Workspaces" parent="menu_custom_maintenance_root" sequence="10"/>
+    <menuitem id="menu_maintenance_tickets" name="Tickets" parent="menu_maintenance_workspaces" action="action_maintenance_request" sequence="10"/>
+    <menuitem id="menu_maintenance_operations" name="Operations" parent="menu_maintenance_workspaces" action="action_maintenance_operation" sequence="20"/>
+    
+    <!-- Level 2: Equipment -->
+    <menuitem id="menu_maintenance_equipment" name="Equipment" parent="menu_custom_maintenance_root" sequence="20"/>
+    <menuitem id="menu_machine_assets" name="Machines" parent="menu_maintenance_equipment" action="action_maintenance_machine" sequence="10"/>
+    <menuitem id="menu_part_assets" name="Parts" parent="menu_maintenance_equipment" action="action_maintenance_part" sequence="20"/>
+    
+    <!-- Level 2: Configuration -->
+    <menuitem id="menu_maintenance_config" name="Configuration" parent="menu_custom_maintenance_root" sequence="30"/>
+    <menuitem id="menu_maintenance_teams" name="Teams" parent="menu_maintenance_config" action="action_maintenance_team" sequence="10"/>
+
+</odoo>

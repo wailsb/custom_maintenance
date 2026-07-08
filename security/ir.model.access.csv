@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_maintenance_machine,access_maintenance_machine,model_maintenance_machine,base.group_user,1,1,1,1
+access_maintenance_part,access_maintenance_part,model_maintenance_part,base.group_user,1,1,1,1
+access_maintenance_team,access_maintenance_team,model_maintenance_team,base.group_user,1,1,1,1
+access_maintenance_request,access_maintenance_request,model_maintenance_request,base.group_user,1,1,1,1
+access_maintenance_operation,access_maintenance_operation,model_maintenance_operation,base.group_user,1,1,1,1
